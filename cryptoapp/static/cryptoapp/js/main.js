@@ -1,15 +1,104 @@
 //Constantes
 const books = [
-    { book: 'usd_mxn', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'eth_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 }, 
-    /*{ book: 'eth_mxn', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },*/
-    { book: 'sol_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    //{ book: 'doge_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'btc_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'aave_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'xrp_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'ltc_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
-    { book: 'ape_usd', last_price: 0, current_price: 0, max_price:0, operaciones: 0 },
+    //{ book: 'usd_mxn', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },
+    {
+        book: 'eth_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    /*{ book: 'eth_mxn', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },*/
+    {
+        book: 'sol_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    //{ book: 'doge_usd', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },
+    {
+        book: 'btc_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'aave_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'xrp_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'ltc_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'ape_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'comp_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'link_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    },
+    {
+        book: 'ada_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    }
+    ,{
+        book: 'uni_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    }
+    ,{
+        book: 'mana_usd',
+        last_price: 0,
+        current_price: 0,
+        max_price: 0,
+        min_price: 0,
+        operaciones: 0
+    }
 ]
 
 $(() => {
@@ -64,7 +153,7 @@ function openSocket(websocket) {
 
 function messageSocket(websocket, message) {
     let data = JSON.parse(message.data);
-    
+
     if (data.action && data.action == 'subscribe') {
         alert('Connection success', 'success');
     }
@@ -85,19 +174,29 @@ function newTrade(data) {
 
     const element = document.querySelector(`[data-id="${data.book}"]`);
     let book = books.find((item) => item.book == data.book);
-    let play = false;
+    let playUp = false;
+    let playDown = false;
     book.last_price = book.current_price;
     book.current_price = data.payload[0].r;
     book.operaciones = book.operaciones + 1;
+
     //book.max_price = book.current_price > book.max_price ? book.current_price : book.max_price;
-    if(book.current_price > book.max_price){
+    if (book.current_price > book.max_price) {
         book.max_price = book.current_price;
-        play = true;
-        playsound();
-    }else{
-        book.max_price = book.max_price;
+        playUp = true;
+        //playsound('up');
     }
-    
+
+    if (book.current_price < book.min_price) {
+        book.min_price = book.current_price;
+        playDown = true;
+        playsound('down');
+    } else {
+        if (book.min_price <= 0) {
+            book.min_price = book.current_price;
+        }
+    }
+
 
     const template = [
         `<div>`,
@@ -106,8 +205,16 @@ function newTrade(data) {
         `           <td>`,
         `               Precio Max:`,
         `           </td>`,
-        `           <td class="${ play ? 'text-warning' : ''}">`,
+        `           <td class="${ playUp ? 'text-warning' : ''}">`,
         `               $${book.max_price}`,
+        `           </td>`,
+        `       </tr>`,
+        `       <tr>`,
+        `           <td>`,
+        `               Precio Min:`,
+        `           </td>`,
+        `           <td class="${ playDown ? 'text-warning' : ''}">`,
+        `               $${book.min_price}`,
         `           </td>`,
         `       </tr>`,
         `       <tr>`,
@@ -148,11 +255,13 @@ function newTrade(data) {
     $(element).html(template);
 }
 
-function playsound() {
-    var x = document.getElementById("audio");
+function playsound(type) {
+    let x = document.getElementById("audio");
+    let play = false;
+    $(x).attr('src', `http://127.0.0.1:3000/static/cryptoapp/audio/n${ type == 'up' ? '1':'2' }.mp3`);
     x.play();
     return;
-    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
     var source = audioCtx.createBufferSource();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1:8000/static/socketsapp/audio.mp3');
@@ -178,7 +287,7 @@ const alert = (message, type) => {
         //`   <div id="mensaje">${message}</div>`,
         `   <div id="mensaje">${message}`,
         `       <audio controls id="audio">`,
-        `           <source src="http://127.0.0.1:8000/static/cryptoapp/audio/n1.mp3" type="audio/mpeg">`,
+        `           <source src="http://127.0.0.1:3000/static/cryptoapp/audio/n1.mp3" type="audio/mpeg">`,
         `       </audio>`,
         `   </div>`,
         '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
