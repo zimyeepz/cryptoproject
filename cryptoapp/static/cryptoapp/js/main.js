@@ -1,6 +1,6 @@
 //Constantes
 const books = [
-    //{ book: 'usd_mxn', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },
+    
     {
         book: 'eth_usd',
         last_price: 0,
@@ -9,7 +9,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    /*{ book: 'eth_mxn', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },*/
+    
     {
         book: 'sol_usd',
         last_price: 0,
@@ -18,7 +18,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    //{ book: 'doge_usd', last_price: 0, current_price: 0, max_price:0, min_price:0, operaciones: 0 },
+    
     {
         book: 'btc_usd',
         last_price: 0,
@@ -110,6 +110,9 @@ $(() => {
     websocket.onmessage = (message) => {
         messageSocket(websocket, message)
     }
+    websocket.onclose = (e) => {
+        alert('Connection Close ' + JSON.stringify(e),'danger');
+    }
 });
 
 function createBooks() {
@@ -184,7 +187,7 @@ function newTrade(data) {
     if (book.current_price > book.max_price) {
         book.max_price = book.current_price;
         playUp = true;
-        //playsound('up');
+        playsound('up');
     }
 
     if (book.current_price < book.min_price) {
@@ -230,7 +233,7 @@ function newTrade(data) {
         `               Precio actual:`,
         `           </td>`,
         `           <td>`,
-        `               $${book.current_price}`,
+        `               <a href="#">$${book.current_price}</a>`,
         `           </td>`,
         `       </tr>`,
         `       <tr>`,
@@ -256,9 +259,17 @@ function newTrade(data) {
 }
 
 function playsound(type) {
-    let x = document.getElementById("audio");
-    let play = false;
-    $(x).attr('src', `http://127.0.0.1:3000/static/cryptoapp/audio/n${ type == 'up' ? '1':'2' }.mp3`);
+    let x ;
+    if(type == 'up'){
+        x = document.getElementById("audio1");
+    }else if (type == 'down') {
+        x = document.getElementById("audio2");
+    }else{
+        return;
+    }
+    
+    //$(x).attr('src', `http://127.0.0.1:3000/static/cryptoapp/audio/n${ type == 'up' ? '1':'2' }.mp3`);
+    
     x.play();
     return;
     var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
@@ -286,8 +297,11 @@ const alert = (message, type) => {
         `<div class="alert alert-${type} alert-dismissible" role="alert">`,
         //`   <div id="mensaje">${message}</div>`,
         `   <div id="mensaje">${message}`,
-        `       <audio controls id="audio">`,
+        `       <audio controls id="audio1">`,
         `           <source src="http://127.0.0.1:3000/static/cryptoapp/audio/n1.mp3" type="audio/mpeg">`,
+        `       </audio>`,
+        `       <audio controls id="audio2">`,
+        `           <source src="http://127.0.0.1:3000/static/cryptoapp/audio/n2.mp3" type="audio/mpeg">`,
         `       </audio>`,
         `   </div>`,
         '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
