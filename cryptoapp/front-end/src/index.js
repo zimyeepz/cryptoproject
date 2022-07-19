@@ -1,20 +1,15 @@
 import React from "react";
-import ReactDOM from 'react-dom/client'
-import About from "./components/About";
-import Crypto from "./components/Crypto";
-
-
+import ReactDOM from 'react-dom/client';
+import { Provider } from 'react-redux'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import store from "./store";
+import App from "./App";
 
 const root = ReactDOM.createRoot(
-    document.getElementById('app')
+    document.getElementById('root')
 );
-
-
-const element = <Crypto date={new Date()} />;
-root.render(element);
-
-/*ReactDOM.render(
-    element,
-    document.getElementById('app')
+root.render(
+    <Provider store={store}>
+        <App />
+    </Provider>
 );
-*/

@@ -1,6 +1,6 @@
 //Constantes
 const books = [
-    
+
     {
         book: 'eth_usd',
         last_price: 0,
@@ -9,7 +9,6 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    
     {
         book: 'sol_usd',
         last_price: 0,
@@ -18,7 +17,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    
+
     {
         book: 'btc_usd',
         last_price: 0,
@@ -83,7 +82,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     }
-    ,{
+    , {
         book: 'uni_usd',
         last_price: 0,
         current_price: 0,
@@ -91,7 +90,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     }
-    ,{
+    , {
         book: 'mana_usd',
         last_price: 0,
         current_price: 0,
@@ -111,7 +110,7 @@ $(() => {
         messageSocket(websocket, message)
     }
     websocket.onclose = (e) => {
-        alert('Connection Close ' + JSON.stringify(e),'danger');
+        alert('Connection Close ' + JSON.stringify(e), 'danger');
     }
 });
 
@@ -188,12 +187,14 @@ function newTrade(data) {
         book.max_price = book.current_price;
         playUp = true;
         playsound('up');
+        document.title = " ↑ "+data.book;
     }
 
     if (book.current_price < book.min_price) {
         book.min_price = book.current_price;
         playDown = true;
         playsound('down');
+        document.title = " ↓ "+data.book;
     } else {
         if (book.min_price <= 0) {
             book.min_price = book.current_price;
@@ -208,7 +209,7 @@ function newTrade(data) {
         `           <td>`,
         `               Precio Max:`,
         `           </td>`,
-        `           <td class="${ playUp ? 'text-warning' : ''}">`,
+        `           <td class="${playUp ? 'text-warning' : ''}">`,
         `               $${book.max_price}`,
         `           </td>`,
         `       </tr>`,
@@ -216,7 +217,7 @@ function newTrade(data) {
         `           <td>`,
         `               Precio Min:`,
         `           </td>`,
-        `           <td class="${ playDown ? 'text-warning' : ''}">`,
+        `           <td class="${playDown ? 'text-warning' : ''}">`,
         `               $${book.min_price}`,
         `           </td>`,
         `       </tr>`,
@@ -240,7 +241,7 @@ function newTrade(data) {
         `           <td>`,
         `               Diferencia:`,
         `           </td>`,
-        `           <td class="${(book.current_price - book.last_price) < 0 ? 'text-danger':'text-success'}">`,
+        `           <td class="${(book.current_price - book.last_price) < 0 ? 'text-danger' : 'text-success'}">`,
         `               $${(book.current_price - book.last_price).toFixed(4)}`,
         `           </td>`,
         `       </tr>`,
@@ -259,20 +260,20 @@ function newTrade(data) {
 }
 
 function playsound(type) {
-    let x ;
-    if(type == 'up'){
+    let x;
+    if (type == 'up') {
         x = document.getElementById("audio1");
-    }else if (type == 'down') {
+    } else if (type == 'down') {
         x = document.getElementById("audio2");
-    }else{
+    } else {
         return;
     }
-    
+
     //$(x).attr('src', `http://127.0.0.1:3000/static/cryptoapp/audio/n${ type == 'up' ? '1':'2' }.mp3`);
-    
+
     x.play();
     return;
-    var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+    var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     var source = audioCtx.createBufferSource();
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'http://127.0.0.1:8000/static/socketsapp/audio.mp3');
