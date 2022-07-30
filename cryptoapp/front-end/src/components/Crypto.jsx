@@ -3,14 +3,29 @@ import Card from 'react-bootstrap/Card';
 
 const Crypto = (props) => (
 
-    <Card style={{ width: '18rem' }}>
+    <div className="col">
+    <Card>
         <Card.Header className="text-center">
-            {props.name}
+            {props.operation.book}
         </Card.Header>
         <Card.Body>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta suscipit numquam tempore perferendis odit eveniet placeat hic, corporis aut dicta, nobis provident nisi quas incidunt accusantium vitae reprehenderit in culpa.
+            
+                {
+                    <table className="table">
+                        <tr>
+                            <td>Monto</td>
+                            <td>{props.operation.payload[0].a}</td>
+                        </tr>
+                        <tr>
+                            <td>Precio</td>
+                            <td>{props.operation.payload[0].r}</td>
+                        </tr>
+                    </table>                                                       
+                }   
+                   
         </Card.Body>
     </Card>
+    </div>
    
 )
 export default Crypto

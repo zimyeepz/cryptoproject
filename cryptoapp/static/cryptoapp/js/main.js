@@ -9,14 +9,14 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    {
+    /*{
         book: 'sol_usd',
         last_price: 0,
         current_price: 0,
         max_price: 0,
         min_price: 0,
         operaciones: 0
-    },
+    },*/
 
     {
         book: 'btc_usd',
@@ -26,7 +26,7 @@ const books = [
         min_price: 0,
         operaciones: 0
     },
-    {
+    /*{
         book: 'aave_usd',
         last_price: 0,
         current_price: 0,
@@ -97,7 +97,7 @@ const books = [
         max_price: 0,
         min_price: 0,
         operaciones: 0
-    }
+    }*/
 ]
 
 $(() => {
